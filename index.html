@@ -394,10 +394,11 @@
             margin-top: 30px;
         }
 
-        /* Photo Gallery Section */
+        /* Infinite Horizontal Scrolling Gallery */
         .gallery-section {
-            padding: 60px 20px;
+            padding: 60px 0;
             animation: fadeInMain 3s ease-out;
+            overflow: hidden;
         }
 
         .gallery-title {
@@ -406,75 +407,54 @@
             color: #ffd700;
             text-align: center;
             margin-bottom: 50px;
+            padding: 0 20px;
         }
 
-        .photo-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .photo-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, #8b0000, #dc143c);
-            border: 3px solid #ff6b81;
-            cursor: pointer;
-            opacity: 0;
-            transform: scale(0.5);
-            animation: photoAppear 1.2s ease-out forwards;
-        }
-
-        /* Stagger animation delays for each photo */
-        .photo-item:nth-child(1) { animation-delay: 0.2s; }
-        .photo-item:nth-child(2) { animation-delay: 0.4s; }
-        .photo-item:nth-child(3) { animation-delay: 0.6s; }
-        .photo-item:nth-child(4) { animation-delay: 0.8s; }
-        .photo-item:nth-child(5) { animation-delay: 1s; }
-        .photo-item:nth-child(6) { animation-delay: 1.2s; }
-        .photo-item:nth-child(7) { animation-delay: 1.4s; }
-        .photo-item:nth-child(8) { animation-delay: 1.6s; }
-
-        @keyframes photoAppear {
-            0% {
-                opacity: 0;
-                transform: scale(0.3) rotate(-10deg);
-            }
-            60% {
-                opacity: 1;
-                transform: scale(1.1) rotate(3deg);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotate(0deg);
-            }
-        }
-
-        .photo-item:hover {
-            transform: scale(1.05) !important;
-            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .photo-item img {
+        .slideshow-container {
             width: 100%;
-            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slideshow-track {
+            display: flex;
+            gap: 30px;
+            animation: scroll 30s linear infinite;
+            width: fit-content;
+        }
+
+        .slideshow-track:hover {
+            animation-play-state: paused;
+        }
+
+        .slide {
+            flex-shrink: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.4);
+            border: 3px solid #ff6b81;
+            transition: transform 0.3s ease;
+        }
+
+        .slide:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 129, 0.6);
+        }
+
+        .slide img {
+            display: block;
+            height: 400px;
+            width: auto;
             object-fit: cover;
         }
 
-        .photo-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            font-size: 1.2rem;
-            color: #ffd700;
-            text-align: center;
-            padding: 20px;
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         /* Music Player */
@@ -734,33 +714,96 @@
                 </div>
             </section>
 
-            <!-- Photo Gallery -->
+            <!-- Photo Slideshow -->
             <section class="gallery-section">
                 <h2 class="gallery-title">Our Beautiful Moments Together</h2>
-                <div class="photo-gallery">
-                    <div class="photo-item" onclick="openLightbox('image1.jpeg')">
-                        <img src="image1.jpeg" alt="Our Beautiful Moment">
-                    </div>
-                    <div class="photo-item" onclick="openLightbox('image2.jpeg')">
-                        <img src="image2.jpeg" alt="Our Beautiful Moment">
-                    </div>
-                    <div class="photo-item" onclick="openLightbox('image3.jpeg')">
-                        <img src="image3.jpeg" alt="Our Beautiful Moment">
-                    </div>
-                    <div class="photo-item" onclick="openLightbox('image4.jpeg')">
-                        <img src="image4.jpeg" alt="Our Beautiful Moment">
-                    </div>
-                    <div class="photo-item" onclick="openLightbox('image5.jpeg')">
-                        <img src="image5.jpeg" alt="Our Beautiful Moment">
-                    </div>
-                    <div class="photo-item" onclick="openLightbox('image6.jpeg')">
-                        <img src="image6.jpeg" alt="Our Beautiful Moment">
-                    </div>
-                    <div class="photo-item" onclick="openLightbox('image7.jpeg')">
-                        <img src="image7.jpeg" alt="Our Beautiful Moment">
-                    </div>
-                    <div class="photo-item" onclick="openLightbox('image8.jpeg')">
-                        <img src="image8.jpeg" alt="Our Beautiful Moment">
+                <div class="slideshow-container">
+                    <div class="slideshow-track">
+                        <div class="slide">
+                            <img src="image1.jpeg" alt="Our Beautiful Moment 1">
+                        </div>
+                        <div class="slide">
+                            <img src="image2.jpeg" alt="Our Beautiful Moment 2">
+                        </div>
+                        <div class="slide">
+                            <img src="image3.jpeg" alt="Our Beautiful Moment 3">
+                        </div>
+                        <div class="slide">
+                            <img src="image4.jpeg" alt="Our Beautiful Moment 4">
+                        </div>
+                        <div class="slide">
+                            <img src="image5.jpeg" alt="Our Beautiful Moment 5">
+                        </div>
+                        <div class="slide">
+                            <img src="image6.jpeg" alt="Our Beautiful Moment 6">
+                        </div>
+                        <div class="slide">
+                            <img src="image7.jpeg" alt="Our Beautiful Moment 7">
+                        </div>
+                        <div class="slide">
+                            <img src="image8.jpeg" alt="Our Beautiful Moment 8">
+                        </div>
+                        <div class="slide">
+                            <img src="image9.jpeg" alt="Our Beautiful Moment 9">
+                        </div>
+                        <div class="slide">
+                            <img src="image10.jpeg" alt="Our Beautiful Moment 10">
+                        </div>
+                        <div class="slide">
+                            <img src="image11.jpeg" alt="Our Beautiful Moment 11">
+                        </div>
+                        <div class="slide">
+                            <img src="image12.jpeg" alt="Our Beautiful Moment 12">
+                        </div>
+                        <div class="slide">
+                            <img src="image13.jpeg" alt="Our Beautiful Moment 13">
+                        </div>
+                        <div class="slide">
+                            <img src="image14.jpeg" alt="Our Beautiful Moment 14">
+                        </div>
+                        <!-- Duplicate images for seamless infinite loop -->
+                        <div class="slide">
+                            <img src="image1.jpeg" alt="Our Beautiful Moment 1">
+                        </div>
+                        <div class="slide">
+                            <img src="image2.jpeg" alt="Our Beautiful Moment 2">
+                        </div>
+                        <div class="slide">
+                            <img src="image3.jpeg" alt="Our Beautiful Moment 3">
+                        </div>
+                        <div class="slide">
+                            <img src="image4.jpeg" alt="Our Beautiful Moment 4">
+                        </div>
+                        <div class="slide">
+                            <img src="image5.jpeg" alt="Our Beautiful Moment 5">
+                        </div>
+                        <div class="slide">
+                            <img src="image6.jpeg" alt="Our Beautiful Moment 6">
+                        </div>
+                        <div class="slide">
+                            <img src="image7.jpeg" alt="Our Beautiful Moment 7">
+                        </div>
+                        <div class="slide">
+                            <img src="image8.jpeg" alt="Our Beautiful Moment 8">
+                        </div>
+                        <div class="slide">
+                            <img src="image9.jpeg" alt="Our Beautiful Moment 9">
+                        </div>
+                        <div class="slide">
+                            <img src="image10.jpeg" alt="Our Beautiful Moment 10">
+                        </div>
+                        <div class="slide">
+                            <img src="image11.jpeg" alt="Our Beautiful Moment 11">
+                        </div>
+                        <div class="slide">
+                            <img src="image12.jpeg" alt="Our Beautiful Moment 12">
+                        </div>
+                        <div class="slide">
+                            <img src="image13.jpeg" alt="Our Beautiful Moment 13">
+                        </div>
+                        <div class="slide">
+                            <img src="image14.jpeg" alt="Our Beautiful Moment 14">
+                        </div>
                     </div>
                 </div>
             </section>
