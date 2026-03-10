@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Baby ❤️</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* ========== INTRO SCREEN STYLES ========== */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #f5e6f0 0%, #e8d4e0 50%, #dcc4d0 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1.5s ease-out;
+        }
+
+        #intro-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #tulip-container {
+            position: relative;
+            width: 500px;
+            height: 600px;
+        }
+
+        /* SVG Tulip Styles */
+        .tulip-svg {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Green base/pot */
+        .base-group {
+            fill: #6fb347;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+            animation-delay: 1.5s;
+        }
+
+        /* Stem path animation */
+        .stem-path {
+            stroke: #5d8a3a;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: drawPath 2s ease-out forwards;
+        }
+
+        .stem-1 { animation-delay: 2s; }
+        .stem-2 { animation-delay: 2.2s; }
+        .stem-3 { animation-delay: 2.4s; }
+
+        /* Leaf path animation */
+        .leaf-path {
+            fill: #6fb347;
+            opacity: 0;
+            transform-origin: center;
+            animation: fadeInScale 0.8s ease-out forwards;
+        }
+
+        .leaf-1 { animation-delay: 2.8s; }
+        .leaf-2 { animation-delay: 3s; }
+        .leaf-3 { animation-delay: 3.2s; }
+        .leaf-4 { animation-delay: 3.4s; }
+        .leaf-5 { animation-delay: 3.6s; }
+
+        /* Tulip flower petals - more realistic closed tulip shape */
+        .tulip-petal {
+            opacity: 0;
+            transform-origin: bottom center;
+            animation: bloomPetal 1.2s ease-out forwards;
+        }
+
+        /* Left tulip - darker pink */
+        .tulip-1-petal-1 { fill: #e94680; animation-delay: 4s; }
+        .tulip-1-petal-2 { fill: #d63a72; animation-delay: 4.2s; }
+        .tulip-1-petal-3 { fill: #e94680; animation-delay: 4.4s; }
+
+        /* Middle tulip - lighter pink (taller) */
+        .tulip-2-petal-1 { fill: #ff6b9d; animation-delay: 3.8s; }
+        .tulip-2-petal-2 { fill: #e94680; animation-delay: 4s; }
+        .tulip-2-petal-3 { fill: #ff6b9d; animation-delay: 4.2s; }
+
+        /* Right tulip - medium pink */
+        .tulip-3-petal-1 { fill: #e94680; animation-delay: 4.1s; }
+        .tulip-3-petal-2 { fill: #d63a72; animation-delay: 4.3s; }
+        .tulip-3-petal-3 { fill: #e94680; animation-delay: 4.5s; }
+
+        @keyframes bloomPetal {
+            0% {
+                opacity: 0;
+                transform: scaleY(0) scaleX(0.5);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scaleY(0.5) scaleX(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scaleY(1) scaleX(1);
+            }
+        }
+
+        @keyframes drawPath {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes drawPetal {
+            0% {
+                opacity: 0;
+                transform: scaleY(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Enter Button */
+        #enter-btn {
+            opacity: 0;
+            margin-top: 80px;
+            padding: 20px 60px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #e83e7c 0%, #d62964 50%, #b01d4e 100%);
+            border: 3px solid #ffd700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInButton 1.5s ease-out forwards;
+            animation-delay: 5.5s;
+            box-shadow: 0 8px 25px rgba(232, 62, 124, 0.5), inset 0 -3px 10px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #enter-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        #enter-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        #enter-btn:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 12px 35px rgba(232, 62, 124, 0.7), inset 0 -3px 10px rgba(0,0,0,0.3);
+            border-color: #fff;
+        }
+
+        @keyframes fadeInButton {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== MAIN PAGE STYLES ========== */
+        #main-content {
+            background: linear-gradient(135deg, #1a0000 0%, #4a0000 50%, #1a0000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: fixed;
+            color: #ff4757;
+            font-size: 24px;
+            animation: float 6s infinite ease-in;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 5rem;
+            color: #ff6b81;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(255, 107, 129, 0.5), 0 0 30px rgba(255, 107, 129, 0.3);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(255, 107, 129, 0.8), 0 0 40px rgba(255, 107, 129, 0.5);
+            }
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #ffd700;
+            letter-spacing: 3px;
+        }
+
+        /* Countdown Section */
+        .countdown-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(139, 0, 0, 0.3);
+            border-radius: 20px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+            animation: fadeInMain 2s ease-out;
+        }
+
+        .countdown-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 30px;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: rgba(220, 20, 60, 0.4);
+            padding: 20px 30px;
+            border-radius: 15px;
+            border: 2px solid #ff6b81;
+            min-width: 120px;
+        }
+
+        .countdown-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff4757;
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 1rem;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .birthday-message {
+            display: none;
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #ff6b81;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Personal Message Section */
+        .message-section {
+            padding: 60px 20px;
+            text-align: center;
+            animation: fadeInMain 2.5s ease-out;
+        }
+
+        .message-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 30px;
+        }
+
+        .personal-message {
+            background: rgba(139, 0, 0, 0.3);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 129, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .personal-message p {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: #ffb6c1;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: #ff6b81;
+            margin-top: 30px;
+        }
+
+        /* Photo Gallery Section */
+        .gallery-section {
+            padding: 60px 20px;
+            animation: fadeInMain 3s ease-out;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #8b0000, #dc143c);
+            border: 3px solid #ff6b81;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: photoAppear 1.2s ease-out forwards;
+        }
+
+        /* Stagger animation delays for each photo */
+        .photo-item:nth-child(1) { animation-delay: 0.2s; }
+        .photo-item:nth-child(2) { animation-delay: 0.4s; }
+        .photo-item:nth-child(3) { animation-delay: 0.6s; }
+        .photo-item:nth-child(4) { animation-delay: 0.8s; }
+        .photo-item:nth-child(5) { animation-delay: 1s; }
+        .photo-item:nth-child(6) { animation-delay: 1.2s; }
+        .photo-item:nth-child(7) { animation-delay: 1.4s; }
+        .photo-item:nth-child(8) { animation-delay: 1.6s; }
+
+        @keyframes photoAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-10deg);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.1) rotate(3deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .photo-item:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 1.2rem;
+            color: #ffd700;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Music Player */
+        .music-section {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInMain 3.5s ease-out;
+        }
+
+        .music-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        audio {
+            width: 300px;
+            max-width: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 20px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: #ff6b81;
+            animation: fadeInMain 4s ease-out;
+        }
+
+        /* Animations */
+        @keyframes fadeInMain {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #tulip-container {
+                width: 350px;
+                height: 500px;
+            }
+
+            .main-title {
+                font-size: 3rem;
+            }
+
+            .countdown-item {
+                min-width: 80px;
+                padding: 15px 20px;
+            }
+
+            .countdown-value {
+                font-size: 2rem;
+            }
+
+            .message-title, .gallery-title {
+                font-size: 2rem;
+            }
+
+            .personal-message p {
+                font-size: 1.1rem;
+            }
+
+            .photo-gallery {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            #enter-btn {
+                padding: 15px 45px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #fff;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== INTRO SCREEN ========== -->
+    <div id="intro-screen">
+        <div id="tulip-container">
+            <svg class="tulip-svg" width="350" height="500" viewBox="0 0 350 500" xmlns="http://www.w3.org/2000/svg">
+                <!-- Green grass base -->
+                <ellipse class="base-group" cx="175" cy="450" rx="100" ry="30" fill="#6fb347" />
+
+                <!-- Left Tulip Stem -->
+                <line class="stem-path stem-1" x1="145" y1="450" x2="145" y2="200" stroke="#5d8a3a" stroke-width="3" />
+
+                <!-- Middle Tulip Stem (tallest) -->
+                <line class="stem-path stem-2" x1="175" y1="450" x2="175" y2="150" stroke="#5d8a3a" stroke-width="3" />
+
+                <!-- Right Tulip Stem -->
+                <line class="stem-path stem-3" x1="205" y1="450" x2="205" y2="180" stroke="#5d8a3a" stroke-width="3" />
+
+                <!-- Leaves -->
+                <ellipse class="leaf-path leaf-1" cx="130" cy="350" rx="45" ry="15" transform="rotate(-35 130 350)" fill="#6fb347" />
+                <ellipse class="leaf-path leaf-2" cx="160" cy="320" rx="50" ry="16" transform="rotate(20 160 320)" fill="#6fb347" />
+                <ellipse class="leaf-path leaf-3" cx="190" cy="340" rx="48" ry="15" transform="rotate(-15 190 340)" fill="#6fb347" />
+                <ellipse class="leaf-path leaf-4" cx="220" cy="310" rx="52" ry="17" transform="rotate(30 220 310)" fill="#6fb347" />
+
+                <!-- Left Tulip (closed realistic shape) -->
+                <g class="tulip-petal tulip-1-petal-1">
+                    <path d="M 145 200 Q 135 190 130 165 Q 127 140 128 120 Q 132 130 137 155 Q 142 180 145 198 Z" fill="#e94680" />
+                </g>
+                <g class="tulip-petal tulip-1-petal-2">
+                    <path d="M 145 200 Q 145 175 145 150 Q 145 125 145 110 Q 145 125 145 150 Q 145 175 145 200 Z" fill="#d63a72" />
+                </g>
+                <g class="tulip-petal tulip-1-petal-3">
+                    <path d="M 145 200 Q 155 190 160 165 Q 163 140 162 120 Q 158 130 153 155 Q 148 180 145 198 Z" fill="#e94680" />
+                </g>
+
+                <!-- Middle Tulip (tallest, lighter pink) -->
+                <g class="tulip-petal tulip-2-petal-1">
+                    <path d="M 175 150 Q 162 138 155 110 Q 150 80 151 60 Q 156 72 164 95 Q 170 125 175 148 Z" fill="#ff6b9d" />
+                </g>
+                <g class="tulip-petal tulip-2-petal-2">
+                    <path d="M 175 150 Q 175 122 175 95 Q 175 68 175 50 Q 175 68 175 95 Q 175 122 175 150 Z" fill="#e94680" />
+                </g>
+                <g class="tulip-petal tulip-2-petal-3">
+                    <path d="M 175 150 Q 188 138 195 110 Q 200 80 199 60 Q 194 72 186 95 Q 180 125 175 148 Z" fill="#ff6b9d" />
+                </g>
+
+                <!-- Right Tulip (medium height) -->
+                <g class="tulip-petal tulip-3-petal-1">
+                    <path d="M 205 180 Q 195 170 190 145 Q 187 120 188 100 Q 192 110 197 130 Q 202 160 205 178 Z" fill="#e94680" />
+                </g>
+                <g class="tulip-petal tulip-3-petal-2">
+                    <path d="M 205 180 Q 205 155 205 130 Q 205 105 205 90 Q 205 105 205 130 Q 205 155 205 180 Z" fill="#d63a72" />
+                </g>
+                <g class="tulip-petal tulip-3-petal-3">
+                    <path d="M 205 180 Q 215 170 220 145 Q 223 120 222 100 Q 218 110 213 130 Q 208 160 205 178 Z" fill="#e94680" />
+                </g>
+            </svg>
+        </div>
+
+        <button id="enter-btn">Enter</button>
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div id="main-content">
+        <!-- Floating Hearts Container -->
+        <div id="hearts-container"></div>
+
+        <!-- Lightbox -->
+        <div class="lightbox" id="lightbox">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <img id="lightbox-img" src="" alt="Photo">
+        </div>
+
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="main-title">Happy Birthday Baby</h1>
+                <p class="subtitle">To My One and Only</p>
+            </header>
+
+            <!-- Countdown Timer -->
+            <section class="countdown-section">
+                <h2 class="countdown-title">Countdown to Your Special Moment</h2>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="days">00</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="hours">00</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="minutes">00</span>
+                        <span class="countdown-label">Minutes</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="seconds">00</span>
+                        <span class="countdown-label">Seconds</span>
+                    </div>
+                </div>
+                <div class="birthday-message" id="birthday-message">
+                    🎉 Happy Birthday My Love! 🎉
+                </div>
+            </section>
+
+            <!-- Personal Message -->
+            <section class="message-section">
+                <h2 class="message-title">A Message From My Heart</h2>
+                <div class="personal-message">
+                    <!-- REPLACE THIS TEXT WITH YOUR PERSONAL MESSAGE -->
+                    <p>
+                        On this special day, I want you to know how incredibly blessed I am to have you in my life.
+                        Every moment with you is a treasure, and every day with you feels like a beautiful dream.
+                    </p>
+                    <p>
+                        You bring so much joy, love, and light into my world. Your smile brightens my darkest days,
+                        and your love gives me strength. You are my everything, my best friend, my soulmate.
+                    </p>
+                    <p>
+                        As you celebrate your 21st birthday, I want you to know that my love for you grows stronger
+                        with each passing day. Here's to many more beautiful memories together, my love.
+                    </p>
+                    <p>
+                        I love you more than words can ever express. Happy Birthday, Baby! 💕
+                    </p>
+                    <!-- END OF MESSAGE - Replace the above paragraphs with your own words -->
+
+                    <div class="signature">Forever Yours ❤️</div>
+                </div>
+            </section>
+
+            <!-- Photo Gallery -->
+            <section class="gallery-section">
+                <h2 class="gallery-title">Our Beautiful Moments Together</h2>
+                <div class="photo-gallery">
+                    <div class="photo-item" onclick="openLightbox('image1.jpeg')">
+                        <img src="image1.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                    <div class="photo-item" onclick="openLightbox('image2.jpeg')">
+                        <img src="image2.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                    <div class="photo-item" onclick="openLightbox('image3.jpeg')">
+                        <img src="image3.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                    <div class="photo-item" onclick="openLightbox('image4.jpeg')">
+                        <img src="image4.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                    <div class="photo-item" onclick="openLightbox('image5.jpeg')">
+                        <img src="image5.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                    <div class="photo-item" onclick="openLightbox('image6.jpeg')">
+                        <img src="image6.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                    <div class="photo-item" onclick="openLightbox('image7.jpeg')">
+                        <img src="image7.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                    <div class="photo-item" onclick="openLightbox('image8.jpeg')">
+                        <img src="image8.jpeg" alt="Our Beautiful Moment">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Music Player -->
+            <section class="music-section">
+                <h3 class="music-title">🎵 Our Song 🎵</h3>
+                <audio controls loop autoplay>
+                    <source src="Thinking Out Loud.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                You mean the world to me, Baby ❤️
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // ========== INTRO SCREEN LOGIC ==========
+        const introScreen = document.getElementById('intro-screen');
+        const mainContent = document.getElementById('main-content');
+        const enterBtn = document.getElementById('enter-btn');
+
+        enterBtn.addEventListener('click', function() {
+            introScreen.classList.add('hidden');
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+                window.scrollTo(0, 0); // Scroll to top of page
+                startHearts();
+                // Play music after user interaction
+                const audio = document.querySelector('audio');
+                if (audio) {
+                    audio.play().catch(e => console.log('Auto-play prevented:', e));
+                }
+            }, 1500);
+        });
+
+        // ========== MAIN PAGE LOGIC ==========
+
+        // Countdown Timer to Midnight
+        function updateCountdown() {
+            const now = new Date();
+            const midnight = new Date();
+            midnight.setHours(24, 0, 0, 0);
+
+            const diff = midnight - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('birthday-message').style.display = 'block';
+                createConfetti();
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Floating Hearts Animation
+        let heartsInterval;
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+
+            document.getElementById('hearts-container').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+
+        function startHearts() {
+            heartsInterval = setInterval(createHeart, 300);
+        }
+
+        // Confetti effect when countdown reaches zero
+        function createConfetti() {
+            const colors = ['#ff6b81', '#ffd700', '#ff4757', '#ffb6c1'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.opacity = '1';
+                    confetti.style.zIndex = '999';
+                    document.body.appendChild(confetti);
+
+                    let pos = -10;
+                    const fall = setInterval(() => {
+                        if (pos >= window.innerHeight) {
+                            clearInterval(fall);
+                            confetti.remove();
+                        } else {
+                            pos += 5;
+                            confetti.style.top = pos + 'px';
+                            confetti.style.left = (parseFloat(confetti.style.left) + (Math.random() - 0.5) * 2) + 'vw';
+                        }
+                    }, 20);
+                }, i * 30);
+            }
+        }
+
+        // Lightbox functionality
+        function openLightbox(imgSrc) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
